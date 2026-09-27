@@ -1,0 +1,35 @@
+---
+import Codeigniter from "@components/icons/Codeigniter.astro";
+import Laravel from "@components/icons/Laravel.astro";
+import Next from "@components/icons/Next.astro";
+import Vue from "@components/icons/Vue.astro";
+import LayoutContent from "@components/LayoutContent.astro";
+import CardProyect from "@components/about_me/CardProyect.astro";
+import Nuxt from "@components/icons/Nuxt.astro";
+import Nest from "@components/icons/Nest.astro";
+import { projects } from "@data/projects.js";
+
+const iconMap = { Codeigniter, Laravel, Next, Vue, Nuxt, Nest };
+---
+
+<LayoutContent
+  id="proyectos"
+  title="Proyectos"
+  description="Mis proyectos mas destacados"
+>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    {
+      projects.map((project) => (
+        <CardProyect
+          title={project.title}
+          description={project.description}
+          image={project.image}
+          linkExternal={project.linkExternal}
+          link={project.link}
+          icons={project.icons.map((name) => iconMap[name as keyof typeof iconMap])}
+          finish={project.finish}
+        />
+      ))
+    }
+  </div>
+</LayoutContent>

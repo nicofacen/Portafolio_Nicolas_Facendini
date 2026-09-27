@@ -1,0 +1,150 @@
+---
+---
+<div class="items-center w-max flex typing-container">
+    <strong class="font-mono mr-1.5 -mb-[-1px] text-2xl @xl:text-3xl">&lt;</strong>
+    <p
+        aria-label="Hi! I'm a developer"
+        class="text-xl @xl:text-2xl font-mono"
+    >
+        <span class="typewriter"></span>
+    </p>
+    <strong class="font-mono ml-1.5 text-2xl @xl:text-3xl">/&gt;</strong>
+</div>
+
+<style>
+    .typing-container {
+        display: none;
+    }
+
+    @media (min-height: 40rem) {
+        .typing-container {
+            display: flex;
+        }
+    }
+
+    @keyframes typing {
+        /* Software Developer, con 1s de pausa vacía al final del ciclo */
+        0.0000%,
+        85.7143% {
+            content: "";
+        }
+        1.9534%,
+        83.7609% {
+            content: "S";
+        }
+        3.9070%,
+        81.8073% {
+            content: "So";
+        }
+        5.8605%,
+        79.8538% {
+            content: "Sof";
+        }
+        7.8139%,
+        77.9004% {
+            content: "Soft";
+        }
+        9.7675%,
+        75.9468% {
+            content: "Softw";
+        }
+        11.7209%,
+        73.9934% {
+            content: "Softwa";
+        }
+        13.6743%,
+        72.0399% {
+            content: "Software";
+        }
+        15.6279%,
+        70.0863% {
+            content: "Software D";
+        }
+        17.5814%,
+        68.1329% {
+            content: "Software De";
+        }
+        19.5348%,
+        66.1795% {
+            content: "Software Dev";
+        }
+        21.4884%,
+        64.2259% {
+            content: "Software Deve";
+        }
+        23.4418%,
+        62.2725% {
+            content: "Software Devel";
+        }
+        25.3954%,
+        60.3189% {
+            content: "Software Develo";
+        }
+        27.3489%,
+        58.3654% {
+            content: "Software Develop";
+        }
+        29.3023%,
+        56.4120% {
+            content: "Software Develope";
+        }
+        31.2559%,
+        54.4584% {
+            content: "Software Developer";
+        }
+    }
+
+    @keyframes blink {
+        0%,
+        100% {
+            opacity: 1;
+        }
+        50% {
+            opacity: 0;
+        }
+    }
+
+    .typewriter {
+        --caret: currentcolor;
+    }
+
+    .typewriter::before {
+        content: "";
+        animation: typing 7s infinite;
+    }
+
+    .typewriter::after {
+        content: "";
+        border-right: 1px solid var(--caret);
+        animation: blink 0.5s linear infinite;
+    }
+
+    .typewriter.thick::after {
+        border-right: 1ch solid var(--caret);
+    }
+
+    .typewriter.nocaret::after {
+        border-right: 0;
+    }
+
+    @media (prefers-reduced-motion) {
+        .typewriter::after {
+            animation: none;
+        }
+
+        @keyframes sequencePopup {
+            0%,
+            100% {
+                content: "Software Developer";
+            }
+            50% {
+                content: "Frontend Junior";
+            }
+        }
+
+        .typewriter::before {
+            content: "Software Developer";
+            animation: sequencePopup 12s linear infinite;
+        }
+    }
+</style>

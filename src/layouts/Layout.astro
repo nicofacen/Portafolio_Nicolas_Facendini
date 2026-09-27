@@ -1,0 +1,65 @@
+---
+import Footer from "@components/Footer.astro";
+import Header from "@components/Header.astro";
+import MenuTabs from "@components/MenuTabs.jsx";
+import PanelSwitcher from "@components/side_menu/PanelSwicher";
+import ChatBot from "@components/shared/ChatBot.jsx";
+import { ClientRouter, ViewTransitions } from 'astro:transitions';
+
+import "@styles/global.css";
+
+interface Props {
+  pageName?: string;
+}
+
+const { pageName = "About me" } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/logorubo.png" />
+		<meta name="generator" content={Astro.generator} />
+		<title>Portfolio</title>
+		<ClientRouter />
+	</head>
+	<body class="min-h-screen flex flex-col bg-main text-primaryText overflow-hidden">
+		<Header />
+
+		<main class="flex-1 flex flex-col min-h-0">
+			<div class="flex w-full h-full flex-1 min-h-0 overflow-hidden">
+				<PanelSwitcher client:load />
+				<div
+					class="flex flex-col flex-1 w-full h-full min-h-0 overflow-y-auto bg-secondary scrollbar-hidden"
+				>
+					<div class="sticky top-0 z-40">
+						<MenuTabs client:load currentPage={pageName} />
+					</div>
+					<slot />
+				</div>
+			</div>
+			<ChatBot client:load />
+		</main>
+
+		<Footer class="fixed bottom-0 left-0 w-full z-50" />
+	</body>
+</html>
+
+<style>
+	html,
+	body {
+		margin: 0;
+		width: 100%;
+		height: 100%;
+		overflow-x: hidden;
+		
+	}
+	.scrollbar-hidden {
+		scrollbar-width: none;
+	}
+	.scrollbar-hidden::-webkit-scrollbar {
+		display: none;
+	}
+</style>
