@@ -12,7 +12,7 @@ export default function ChatHeader({ onClose }) {
           <ChatBotIcon className="h-6 w-6 text-accent" />
         </div>
         <div>
-          <p className="text-sm font-semibold text-white">Rubo Bot</p>
+          <p className="text-sm font-semibold text-white">Nico Bot</p>
           <p className="flex items-center gap-1.5 text-xs text-primaryText/70">
             <span className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse" />
             {t("chat.online")}
