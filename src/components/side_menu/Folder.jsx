@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import FlechaFolder from "@components/icons/FlechaFolder";
 import { getSectionId } from "./explorerData";
+import { useLang } from "@i18n/useLang.js";
 
 export default function Folder({ item, level = 0, activeFile, setActiveFile, onClose }) {
+  const { t } = useLang();
   const [open, setOpen] = useState(item.open);
   const paddingLeft = level === 0 ? 12 : level * 16;
 
@@ -67,7 +69,7 @@ export default function Folder({ item, level = 0, activeFile, setActiveFile, onC
                     style={{ paddingLeft: (level + 1) * 16 }}
                     onClick={() => handleLinkClick(child, onClose)}
                   >
-                    {child.name}
+                    {child.labelKey ? t(child.labelKey) : child.name}
                   </a>
                 ) : (
                   <a
@@ -76,7 +78,7 @@ export default function Folder({ item, level = 0, activeFile, setActiveFile, onC
                     style={{ paddingLeft: (level + 1) * 16 }}
                     onClick={() => handleLinkClick(child, onClose)}
                   >
-                    {child.name}
+                    {child.labelKey ? t(child.labelKey) : child.name}
                   </a>
                 )}
               </li>

@@ -1,7 +1,9 @@
 import { useState } from "react";
 import SendIcon from "../../icons/SendIcon.jsx";
+import { useLang } from "@i18n/useLang.js";
 
 export default function ChatInput({ onSend, disabled }) {
+  const { t } = useLang();
   const [value, setValue] = useState("");
 
   const handleSubmit = (e) => {
@@ -20,7 +22,7 @@ export default function ChatInput({ onSend, disabled }) {
         type="text"
         value={value}
         onChange={(e) => setValue(e.target.value)}
-        placeholder="Escribe tu mensaje..."
+        placeholder={t("chat.placeholder")}
         disabled={disabled}
         className="flex-1 rounded-full bg-main px-4 py-2 text-sm text-primaryText placeholder:text-primaryText/40 outline-none focus:ring-1 focus:ring-accent/50 disabled:opacity-60"
       />
@@ -28,7 +30,7 @@ export default function ChatInput({ onSend, disabled }) {
         type="submit"
         disabled={disabled || !value.trim()}
         className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-accent text-main transition-transform hover:scale-105 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:scale-100"
-        aria-label="Enviar mensaje"
+        aria-label={t("chat.send")}
       >
         <SendIcon className="h-4 w-4" />
       </button>

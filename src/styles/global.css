@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Evita que se vea el texto en español un instante antes de pasar a inglés. */
+html.i18n-pending [data-i18n],
+html.i18n-pending [data-lang-es] {
+  visibility: hidden;
+}

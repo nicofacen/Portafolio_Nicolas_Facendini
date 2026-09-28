@@ -1,13 +1,15 @@
 import PanelSection from "@components/side_menu/PanelSection";
+import { useLang } from "@i18n/useLang.js";
 import { useState } from "react";
 
 export default function DebugPanel() {
-  const [selectedConfig, setSelectedConfig] = useState("Desarrollo Web");
+  const { t } = useLang();
+  const [selectedConfig, setSelectedConfig] = useState("web");
 
   const debugConfigs = [
-    { name: "Desarrollo Web", type: "chrome" },
-    { name: "Node.js", type: "node" },
-    { name: "Pruebas", type: "test" }
+    { id: "web", label: t("debug.web"), type: "chrome" },
+    { id: "node", label: "Node.js", type: "node" },
+    { id: "tests", label: t("debug.tests"), type: "test" }
   ];
 
   const variables = [
@@ -24,7 +26,7 @@ export default function DebugPanel() {
   return (
     <PanelSection>
       <div className="px-3">
-        <h2 className="font-bold text-sm tracking-wide text-accent mb-3">EJECUTAR Y DEPURAR</h2>
+        <h2 className="font-bold text-sm tracking-wide text-accent mb-3">{t("debug.title")}</h2>
 
         {/* Configuration Selector */}
         <div className="mb-4">
@@ -34,15 +36,15 @@ export default function DebugPanel() {
             className="w-full bg-secondary text-primaryText px-3 py-2 text-xs rounded border border-gray-700 focus:border-accent focus:outline-none cursor-pointer"
           >
             {debugConfigs.map((config) => (
-              <option key={config.name} value={config.name}>
-                {config.name}
+              <option key={config.id} value={config.id}>
+                {config.label}
               </option>
             ))}
           </select>
 
           <button className="mt-2 w-full bg-green-600/20 hover:bg-green-600/30 border border-green-500 text-green-400 px-3 py-2 text-xs rounded transition font-semibold flex items-center justify-center gap-2">
             <span>▶</span>
-            <span>Iniciar depuración</span>
+            <span>{t("debug.start")}</span>
           </button>
         </div>
 
@@ -51,7 +53,7 @@ export default function DebugPanel() {
           <details open className="group">
             <summary className="cursor-pointer text-xs font-semibold text-gray-300 uppercase mb-2 hover:text-accent list-none flex items-center gap-1">
               <span className="group-open:rotate-90 transition-transform">▶</span>
-              Variables
+              {t("debug.variables")}
             </summary>
             <ul className="space-y-1 mt-2 ml-4">
               {variables.map((variable, idx) => (
@@ -74,7 +76,7 @@ export default function DebugPanel() {
           <details open className="group">
             <summary className="cursor-pointer text-xs font-semibold text-gray-300 uppercase mb-2 hover:text-accent list-none flex items-center gap-1">
               <span className="group-open:rotate-90 transition-transform">▶</span>
-              Inspección
+              {t("debug.watch")}
             </summary>
             <ul className="space-y-1 mt-2 ml-4">
               {watchExpressions.map((watch, idx) => (
@@ -94,10 +96,10 @@ export default function DebugPanel() {
           <details className="group">
             <summary className="cursor-pointer text-xs font-semibold text-gray-300 uppercase mb-2 hover:text-accent list-none flex items-center gap-1">
               <span className="group-open:rotate-90 transition-transform">▶</span>
-              Pila de llamadas
+              {t("debug.callStack")}
             </summary>
             <div className="mt-2 ml-4 text-xs text-gray-500 italic">
-              No hay sesión de depuración activa
+              {t("debug.noSession")}
             </div>
           </details>
         </div>
@@ -107,12 +109,12 @@ export default function DebugPanel() {
           <details className="group">
             <summary className="cursor-pointer text-xs font-semibold text-gray-300 uppercase mb-2 hover:text-accent list-none flex items-center gap-1">
               <span className="group-open:rotate-90 transition-transform">▶</span>
-              Puntos de interrupción
+              {t("debug.breakpoints")}
             </summary>
             <div className="mt-2 ml-4">
               <button className="text-xs text-accent hover:text-accent/80 flex items-center gap-1">
                 <span>+</span>
-                <span>Agregar punto de interrupción</span>
+                <span>{t("debug.addBreakpoint")}</span>
               </button>
             </div>
           </details>

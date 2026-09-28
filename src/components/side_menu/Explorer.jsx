@@ -3,8 +3,10 @@ import { useEffect, useState } from "react";
 import PanelSection from "./PanelSection";
 import Folder from "./Folder";
 import { explorerItems } from "./explorerData";
+import { useLang } from "@i18n/useLang.js";
 
 export default function Explorer({ onClose }) {
+  const { t } = useLang();
   const [activeFile, setActiveFile] = useState(null);
 
   // Sincronizar activeFile con la URL actual
@@ -57,7 +59,7 @@ export default function Explorer({ onClose }) {
   return (
     <PanelSection>
       <div className="flex items-center px-3 py-2 justify-between">
-        <span className="font-bold text-sm tracking-wide text-accent">Explorador de archivos</span>
+        <span className="font-bold text-sm tracking-wide text-accent">{t("explorer.title")}</span>
         <button onClick={onClose}>
           <Flecha className="text-accent" />
         </button>

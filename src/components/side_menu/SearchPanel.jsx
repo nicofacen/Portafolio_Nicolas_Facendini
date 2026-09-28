@@ -1,15 +1,17 @@
 import PanelSection from "@components/side_menu/PanelSection";
 import ProjectResultCard from "@components/side_menu/ProjectResultCard";
 import { projects } from "@data/projects.js";
+import { useLang } from "@i18n/useLang.js";
 import { useMemo, useState } from "react";
 
 const normalize = (text) =>
   text
     .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[̀-ͯ]/g, "")
     .toLowerCase();
 
 export default function SearchPanel() {
+  const { t } = useLang();
   const [searchTerm, setSearchTerm] = useState("");
 
   const results = useMemo(() => {
@@ -18,22 +20,32 @@ export default function SearchPanel() {
 
     return projects.filter((project) => {
       const haystack = normalize(
-        [project.title, project.description, ...(project.icons ?? [])].join(" ")
+        [
+          project.title,
+          project.description,
+          project.descriptionEn ?? "",
+          ...(project.icons ?? []),
+        ].join(" ")
       );
       return haystack.includes(term);
     });
   }, [searchTerm]);
 
+  const resultsLabel =
+    results.length === 1
+      ? t("search.resultOne", { term: searchTerm })
+      : t("search.resultMany", { count: results.length, term: searchTerm });
+
   return (
     <PanelSection>
       <div className="px-3">
-        <h2 className="font-bold text-sm tracking-wide text-accent mb-3">BUSCAR</h2>
+        <h2 className="font-bold text-sm tracking-wide text-accent mb-3">{t("search.title")}</h2>
 
         {/* Search Input */}
         <div className="mb-3">
           <input
             type="text"
-            placeholder="Buscar proyectos..."
+            placeholder={t("search.placeholder")}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full bg-secondary text-primaryText px-3 py-2 text-xs rounded border border-gray-700 focus:border-accent focus:outline-none"
@@ -43,16 +55,14 @@ export default function SearchPanel() {
         {/* Search Results */}
         <div className="mt-4">
           {!searchTerm.trim() && (
-            <p className="text-gray-500 text-xs italic">
-              Introduce un término para buscar proyectos
-            </p>
+            <p className="text-gray-500 text-xs italic">{t("search.hint")}</p>
           )}
 
           {searchTerm.trim() && (
             <p className="text-gray-500 text-xs mb-2">
               {results.length > 0
-                ? `${results.length} resultado${results.length === 1 ? "" : "s"} para "${searchTerm}"`
-                : `Sin resultados para "${searchTerm}"`}
+                ? resultsLabel
+                : t("search.noResults", { term: searchTerm })}
             </p>
           )}
 
@@ -65,9 +75,7 @@ export default function SearchPanel() {
           )}
 
           {searchTerm.trim() && results.length === 0 && (
-            <p className="text-gray-600 text-xs">
-              Prueba con otro nombre de proyecto o tecnología.
-            </p>
+            <p className="text-gray-600 text-xs">{t("search.tryAnother")}</p>
           )}
         </div>
       </div>

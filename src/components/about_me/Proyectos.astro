@@ -14,8 +14,8 @@ const iconMap = { Codeigniter, Laravel, Next, Vue, Nuxt, Nest };
 
 <LayoutContent
   id="proyectos"
-  title="Proyectos"
-  description="Mis proyectos mas destacados"
+  titleKey="projects.title"
+  descriptionKey="projects.description"
 >
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
     {
@@ -23,6 +23,7 @@ const iconMap = { Codeigniter, Laravel, Next, Vue, Nuxt, Nest };
         <CardProyect
           title={project.title}
           description={project.description}
+          descriptionEn={project.descriptionEn}
           image={project.image}
           linkExternal={project.linkExternal}
           link={project.link}

@@ -1,8 +1,10 @@
 import SourceControlIcon from "@components/icons/SourceControlIcon";
 import PanelSection from "@components/side_menu/PanelSection";
+import { useLang } from "@i18n/useLang.js";
 import { useState } from "react";
 
 export default function SourceControlPanel() {
+  const { t } = useLang();
   const [commitMessage, setCommitMessage] = useState("");
 
   const changes = [
@@ -46,7 +48,7 @@ export default function SourceControlPanel() {
         <div className="mb-4">
           <div className="flex items-center justify-between mb-2">
             <h3 className="text-xs font-semibold text-gray-300 uppercase">Changes ({changes.length})</h3>
-            <button className="text-accent hover:text-accent/80 text-xs" title="Actualizar">
+            <button className="text-accent hover:text-accent/80 text-xs" title={t("sourceControl.refresh")}>
               ↻
             </button>
           </div>
@@ -64,10 +66,10 @@ export default function SourceControlPanel() {
                   <span className="text-xs text-gray-300 truncate">{change.file}</span>
                 </div>
                 <div className="flex gap-1 opacity-0 group-hover:opacity-100">
-                  <button className="text-accent hover:text-accent/80 text-xs" title="Abrir cambios">
+                  <button className="text-accent hover:text-accent/80 text-xs" title={t("sourceControl.openChanges")}>
                     ⊞
                   </button>
-                  <button className="text-gray-400 hover:text-gray-300 text-xs" title="Descartar cambios">
+                  <button className="text-gray-400 hover:text-gray-300 text-xs" title={t("sourceControl.discard")}>
                     ↶
                   </button>
                 </div>

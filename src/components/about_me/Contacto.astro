@@ -2,56 +2,60 @@
 import Email from "@components/icons/Email.astro";
 import LinkedinIcon from "@components/icons/LinkedinIcon.astro";
 import LayoutContent from "@components/LayoutContent.astro";
+import { t } from "@i18n/lang.js";
 ---
 
 <LayoutContent
     id="contacto"
-    title="Contactame"
-    description="¿Tienes una idea en mente? Transformémosla en una experiencia visual única y funcional."
+    titleKey="contact.title"
+    descriptionKey="contact.description"
 >
     <div class="flex flex-col gap-8 md:flex-row md:gap-10 w-full">
         <form
             action=""
             class="flex flex-col gap-4 w-full max-w-lg mx-auto bg-main/80 p-6 rounded-xl shadow-lg"
         >
-            <label class="text-sm font-semibold" for="nombre">Nombre</label>
+            <label class="text-sm font-semibold" for="nombre" data-i18n="contact.name">{t("contact.name", "es")}</label>
             <input
                 id="nombre"
                 type="text"
                 class="rounded-md px-3 py-2 bg-secondary border border-gray-700 focus:outline-none focus:ring-2 focus:ring-accent text-primaryText"
-                placeholder="Tu nombre"
+                placeholder={t("contact.namePlaceholder", "es")}
+                data-i18n-placeholder="contact.namePlaceholder"
             />
 
-            <label class="text-sm font-semibold" for="correo">Correo</label>
+            <label class="text-sm font-semibold" for="correo" data-i18n="contact.email">{t("contact.email", "es")}</label>
             <input
                 id="correo"
                 type="email"
                 class="rounded-md px-3 py-2 bg-secondary border border-gray-700 focus:outline-none focus:ring-2 focus:ring-accent text-primaryText"
-                placeholder="tucorreo@email.com"
+                placeholder={t("contact.emailPlaceholder", "es")}
+                data-i18n-placeholder="contact.emailPlaceholder"
             />
 
-            <label class="text-sm font-semibold" for="mensaje">Mensaje</label>
+            <label class="text-sm font-semibold" for="mensaje" data-i18n="contact.message">{t("contact.message", "es")}</label>
             <textarea
                 id="mensaje"
                 rows="5"
                 class="rounded-md px-3 py-2 bg-secondary border border-gray-700 focus:outline-none focus:ring-2 focus:ring-accent text-primaryText resize-none"
-                placeholder="Escribe tu mensaje..."></textarea>
+                placeholder={t("contact.messagePlaceholder", "es")}
+                data-i18n-placeholder="contact.messagePlaceholder"></textarea>
 
             <button
                 type="submit"
                 class="mt-2 bg-violet-700 text-white font-bold py-2 px-6 rounded-md hover:bg-accent/90 transition"
-                >Enviar</button
+                data-i18n="contact.send"
+                >{t("contact.send", "es")}</button
             >
         </form>
         <div class="w-full flex flex-col justify-center items-center gap-4">
             <p class="max-w-md text-lg text-primaryText/90 text-center">
-                <span class="font-semibold text-violet-700"
-                    >¿Estás listo para dar vida a tu próximo proyecto?</span
-                ><br />Por favor, completa el formulario y cuéntame tu idea.
-                ¡Estaré encantado de ayudarte!
+                <span class="font-semibold text-violet-700" data-i18n="contact.ctaTitle"
+                    >{t("contact.ctaTitle", "es")}</span
+                ><br /><span data-i18n="contact.ctaText">{t("contact.ctaText", "es")}</span>
             </p>
-            <p class="text-base text-primaryText/80 text-center">
-                O contáctame por:
+            <p class="text-base text-primaryText/80 text-center" data-i18n="contact.or">
+                {t("contact.or", "es")}
             </p>
             <div class="flex gap-3 justify-center md:justify-start">
                 <a

@@ -1,7 +1,10 @@
 import ChatBotIcon from "../../icons/ChatBotIcon.jsx";
 import CloseIcon from "../../icons/CloseIcon.jsx";
+import { useLang } from "@i18n/useLang.js";
 
 export default function ChatHeader({ onClose }) {
+  const { t } = useLang();
+
   return (
     <div className="flex items-center justify-between gap-3 border-b border-white/5 bg-secondary px-4 py-3">
       <div className="flex items-center gap-3">
@@ -12,7 +15,7 @@ export default function ChatHeader({ onClose }) {
           <p className="text-sm font-semibold text-white">Rubo Bot</p>
           <p className="flex items-center gap-1.5 text-xs text-primaryText/70">
             <span className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse" />
-            En línea
+            {t("chat.online")}
           </p>
         </div>
       </div>
@@ -20,7 +23,7 @@ export default function ChatHeader({ onClose }) {
         type="button"
         onClick={onClose}
         className="text-primaryText/60 transition-colors hover:text-white"
-        aria-label="Cerrar chat"
+        aria-label={t("chat.close")}
       >
         <CloseIcon className="h-5 w-5" />
       </button>

@@ -5,6 +5,7 @@
 // {
 //   title: "Nombre del proyecto",
 //   description: "Descripción breve",
+//   descriptionEn: "Short description", // opcional, se muestra con la página en inglés
 //   image: "/ruta-a-la-imagen.png", // colocar la imagen en /public
 //   linkExternal: "https://...", // opcional, link al proyecto en vivo
 //   link: "/my-projects/slug-del-proyecto",

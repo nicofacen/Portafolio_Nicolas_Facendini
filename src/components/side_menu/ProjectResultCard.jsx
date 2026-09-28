@@ -1,6 +1,10 @@
+import { useLang } from "@i18n/useLang.js";
+
 export default function ProjectResultCard({ project }) {
-  const { title, description, image, link, finish } = project;
+  const { lang, t } = useLang();
+  const { title, description, descriptionEn, image, link, finish } = project;
   const href = link || "#";
+  const localizedDescription = lang === "en" && descriptionEn ? descriptionEn : description;
 
   return (
     <a
@@ -25,10 +29,10 @@ export default function ProjectResultCard({ project }) {
             className={`flex-shrink-0 w-1.5 h-1.5 rounded-full ${
               finish ? "bg-green-400" : "bg-yellow-400"
             }`}
-            title={finish ? "Completado" : "En progreso"}
+            title={finish ? t("projects.done") : t("projects.inProgress")}
           />
         </div>
-        <p className="text-primaryText/60 text-xs truncate">{description}</p>
+        <p className="text-primaryText/60 text-xs truncate">{localizedDescription}</p>
       </div>
 
       <div className="flex-shrink-0 w-7 h-7 rounded-full bg-skillColor flex items-center justify-center group-hover:bg-accent/10 transition-colors">

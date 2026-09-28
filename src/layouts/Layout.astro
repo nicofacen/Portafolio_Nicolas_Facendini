@@ -16,13 +16,21 @@ const { pageName = "About me" } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="es">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/logorubo.png" />
 		<meta name="generator" content={Astro.generator} />
 		<title>Portfolio</title>
+		<script is:inline>
+			try {
+				if (localStorage.getItem("lang") === "en") {
+					document.documentElement.lang = "en";
+					document.documentElement.classList.add("i18n-pending");
+				}
+			} catch {}
+		</script>
 		<ClientRouter />
 	</head>
 	<body class="min-h-screen flex flex-col bg-main text-primaryText overflow-hidden">
@@ -46,6 +54,18 @@ const { pageName = "About me" } = Astro.props;
 		<Footer class="fixed bottom-0 left-0 w-full z-50" />
 	</body>
 </html>
+
+<script>
+	import { restoreLang, setLang } from "@i18n/lang.js";
+
+	restoreLang();
+	// ClientRouter reemplaza el <html> al navegar, así que hay que volver a aplicar el idioma.
+	document.addEventListener("astro:after-swap", restoreLang);
+	document.addEventListener("click", (event) => {
+		const option = event.target instanceof Element && event.target.closest("[data-lang-option]");
+		if (option) setLang(option.getAttribute("data-lang-option"));
+	});
+</script>
 
 <style>
 	html,

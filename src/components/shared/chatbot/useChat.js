@@ -2,10 +2,9 @@ import { useEffect, useRef, useState } from "react";
 
 const API_URL = import.meta.env.PUBLIC_CHATBOT_API_URL;
 
-const INITIAL_MESSAGE = {
-  from: "bot",
-  text: "¡Hola! Soy el asistente de Rubén. ¿En qué puedo ayudarte?",
-};
+// Los mensajes fijos del bot guardan la clave de traducción en vez del texto,
+// así cambian de idioma junto con la página. No se envían como historial a la IA.
+const INITIAL_MESSAGE = { from: "bot", key: "chat.welcome" };
 
 export function useChat(isOpen) {
   const [messages, setMessages] = useState([INITIAL_MESSAGE]);
@@ -27,7 +26,7 @@ export function useChat(isOpen) {
     if (!API_URL) {
       setMessages((prev) => [
         ...prev,
-        { from: "bot", text: "El chat todavía no está conectado a la IA." },
+        { from: "bot", key: "chat.notConnected" },
       ]);
       return;
     }
@@ -42,12 +41,12 @@ export function useChat(isOpen) {
       const data = await res.json();
       setMessages((prev) => [
         ...prev,
-        { from: "bot", text: data.reply || "No he podido responder, inténtalo de nuevo." },
+        data.reply ? { from: "bot", text: data.reply } : { from: "bot", key: "chat.noReply" },
       ]);
     } catch (err) {
       setMessages((prev) => [
         ...prev,
-        { from: "bot", text: "Ha ocurrido un error al conectar con el asistente." },
+        { from: "bot", key: "chat.error" },
       ]);
     } finally {
       setIsTyping(false);
