@@ -1,7 +1,8 @@
-// Contexto (system prompt) que usa el chatbot para responder sobre Rubén y su portfolio.
+// Contexto (system prompt) que usa el chatbot para responder sobre Nicolas y su portfolio.
 // Lo importa la función serverless que llama a la API de IA — no se usa en el cliente
 // para no exponer el texto completo innecesariamente en cada carga de página.
 import { projects } from "./projects.js";
+import { experience } from "./experience.js";
 
 export const profile = {
   name: "Nicolas Facendini",
@@ -9,16 +10,6 @@ export const profile = {
   education: "Licenciatura en Gestion de la Tecnologia de la Informacion en UADE(Universidad Argentina de la Empresa)",
   bio: "Una persona apasionada por el desarrollo de software y la tecnología que busca su primera experiencia profesional en algun rol de IT.",
 };
-
-export const experience = [
-  {
-    company: "Aiudo",
-    role: "Desarrollador Fullstack",
-    period: "Marzo 2025 - Junio 2025",
-    description:
-      "Desarrolló el frontend de la página de cursos de formación de la empresa con Next.js, mejorando la experiencia de usuario y el acceso a los contenidos formativos. Colaboró en el ERP interno implementando funcionalidades como un calendario para gestionar vacaciones y otras gestiones internas, usando Vue y Laravel.",
-  },
-];
 
 export const skills = {
   frontend: ["HTML", "CSS", "JavaScript", "TypeScript", "Vue", "React", "Astro", "Next.js", "Nuxt.js"],
@@ -32,6 +23,14 @@ export const contact = {
 };
 
 export function buildPortfolioContext() {
+  const experienceText = experience
+    .map((e) => {
+      const when = (e.period ?? e.kind).es;
+      const where = e.org ? ` — ${e.org.es}` : "";
+      return `- ${e.title.es}${where} (${when}): ${e.description.es}`;
+    })
+    .join("\n");
+
   const projectsText = projects
     .map((p) => {
       const status = p.finish ? "finalizado" : "en desarrollo";
@@ -50,7 +49,7 @@ ${profile.bio}
 Formación: ${profile.education}.
 
 ## Experiencia
-${experience.map((e) => `- ${e.role} en ${e.company} (${e.period}): ${e.description}`).join("\n")}
+${experienceText}
 
 ## Habilidades
 - Frontend: ${skills.frontend.join(", ")}

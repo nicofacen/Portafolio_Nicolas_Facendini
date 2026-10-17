@@ -13,6 +13,12 @@ interface Props {
 }
 
 const { pageName = "About me" } = Astro.props;
+
+const title = "Portafolio - Nicolas Facendini";
+const description =
+	"Portafolio de Nicolas Facendini, estudiante de Gestión de la Tecnología de la Información (UADE) orientado al desarrollo web. Proyectos, habilidades y contacto.";
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
+const previewImage = new URL("/profile_photos/Nicolas_Facendini2.jpg", Astro.site);
 ---
 
 <!doctype html>
@@ -22,7 +28,22 @@ const { pageName = "About me" } = Astro.props;
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Portfolio</title>
+		<title>{title}</title>
+		<meta name="description" content={description} />
+		<meta name="author" content="Nicolas Facendini" />
+		<link rel="canonical" href={canonicalUrl} />
+		<meta property="og:type" content="website" />
+		<meta property="og:site_name" content={title} />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:url" content={canonicalUrl} />
+		<meta property="og:image" content={previewImage} />
+		<meta property="og:image:alt" content="Foto de Nicolas Facendini" />
+		<meta property="og:locale" content="es_AR" />
+		<meta name="twitter:card" content="summary" />
+		<meta name="twitter:title" content={title} />
+		<meta name="twitter:description" content={description} />
+		<meta name="twitter:image" content={previewImage} />
 		<script is:inline>
 			try {
 				if (localStorage.getItem("lang") === "en") {

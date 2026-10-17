@@ -18,7 +18,7 @@ export const translations = {
       "A lo largo de mi formación, he adquirido conocimientos en diversas áreas de la tecnología, incluyendo desarrollo web, bases de datos y gestión de proyectos. Me interesa especialmente el desarrollo de aplicaciones web modernas y escalables.",
 
     "experience.title": "Experiencia",
-    "experience.description": "Mi experiencia como desarrollador",
+    "experience.description": "Lo que hice y lo que aprendí",
 
     "skills.title": "Habilidades",
     "skills.description": "Mis habilidades como desarrollador",
@@ -131,7 +131,7 @@ export const translations = {
       "Throughout my studies, I've gained knowledge in several areas of technology, including web development, databases and project management. I'm especially interested in building modern, scalable web applications.",
 
     "experience.title": "Experience",
-    "experience.description": "My experience as a developer",
+    "experience.description": "What I've done and what I've learned",
 
     "skills.title": "Skills",
     "skills.description": "My skills as a developer",
