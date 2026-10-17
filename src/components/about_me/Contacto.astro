@@ -3,6 +3,9 @@ import Email from "@components/icons/Email.astro";
 import LinkedinIcon from "@components/icons/LinkedinIcon.astro";
 import LayoutContent from "@components/LayoutContent.astro";
 import { t } from "@i18n/lang.js";
+
+const fieldClass =
+    "rounded-md px-3 py-2 bg-secondary border border-gray-700 focus:outline-none focus:ring-2 focus:ring-accent text-primaryText";
 ---
 
 <LayoutContent
@@ -12,14 +15,20 @@ import { t } from "@i18n/lang.js";
 >
     <div class="flex flex-col gap-8 md:flex-row md:gap-10 w-full">
         <form
-            action=""
+            id="contact-form"
+            method="post"
+            novalidate
+            data-astro-reload
             class="flex flex-col gap-4 w-full max-w-lg mx-auto bg-main/80 p-6 rounded-xl shadow-lg"
         >
             <label class="text-sm font-semibold" for="nombre" data-i18n="contact.name">{t("contact.name", "es")}</label>
             <input
                 id="nombre"
+                name="name"
                 type="text"
-                class="rounded-md px-3 py-2 bg-secondary border border-gray-700 focus:outline-none focus:ring-2 focus:ring-accent text-primaryText"
+                autocomplete="name"
+                maxlength="80"
+                class={fieldClass}
                 placeholder={t("contact.namePlaceholder", "es")}
                 data-i18n-placeholder="contact.namePlaceholder"
             />
@@ -27,8 +36,11 @@ import { t } from "@i18n/lang.js";
             <label class="text-sm font-semibold" for="correo" data-i18n="contact.email">{t("contact.email", "es")}</label>
             <input
                 id="correo"
+                name="email"
                 type="email"
-                class="rounded-md px-3 py-2 bg-secondary border border-gray-700 focus:outline-none focus:ring-2 focus:ring-accent text-primaryText"
+                autocomplete="email"
+                maxlength="254"
+                class={fieldClass}
                 placeholder={t("contact.emailPlaceholder", "es")}
                 data-i18n-placeholder="contact.emailPlaceholder"
             />
@@ -36,17 +48,25 @@ import { t } from "@i18n/lang.js";
             <label class="text-sm font-semibold" for="mensaje" data-i18n="contact.message">{t("contact.message", "es")}</label>
             <textarea
                 id="mensaje"
+                name="message"
                 rows="5"
-                class="rounded-md px-3 py-2 bg-secondary border border-gray-700 focus:outline-none focus:ring-2 focus:ring-accent text-primaryText resize-none"
+                maxlength="2000"
+                class={`${fieldClass} resize-none`}
                 placeholder={t("contact.messagePlaceholder", "es")}
                 data-i18n-placeholder="contact.messagePlaceholder"></textarea>
 
+            <!-- Trampa para bots: una persona nunca lo ve ni lo marca -->
+            <input type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" style="display: none" aria-hidden="true" />
+
+            <div id="contact-status" hidden aria-live="polite"></div>
+
             <button
                 type="submit"
-                class="mt-2 bg-violet-700 text-white font-bold py-2 px-6 rounded-md hover:bg-accent/90 transition"
-                data-i18n="contact.send"
-                >{t("contact.send", "es")}</button
+                id="contact-submit"
+                class="mt-2 bg-violet-700 text-white font-bold py-2 px-6 rounded-md hover:bg-accent/90 transition disabled:cursor-not-allowed disabled:opacity-60"
             >
+                <span data-i18n="contact.send">{t("contact.send", "es")}</span>
+            </button>
         </form>
         <div class="w-full flex flex-col justify-center items-center gap-4">
             <p class="max-w-md text-lg text-primaryText/90 text-center">
@@ -80,3 +100,186 @@ import { t } from "@i18n/lang.js";
         </div>
     </div>
 </LayoutContent>
+
+<script>
+    import { getLang, t } from "@i18n/lang.js";
+
+    // Servicio que reenvía el mensaje a tu correo (web3forms.com). La clave es pública por diseño.
+    const ENDPOINT = "https://api.web3forms.com/submit";
+    const ACCESS_KEY = import.meta.env.PUBLIC_WEB3FORMS_KEY;
+    const TIMEOUT_MS = 15000;
+
+    const FIELDS = ["name", "email", "message"] as const;
+    const NAME_RE = /^[\p{L}\p{M}][\p{L}\p{M}\s'’.-]*$/u;
+    const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+    const countLetters = (text: string) => (text.match(/\p{L}/gu) ?? []).length;
+    const countWords = (text: string) => (text.match(/\p{L}{2,}/gu) ?? []).length;
+    // "aaaaaa", "!!!!!!", "111111": un solo carácter repetido no es un texto con sentido.
+    const isRepeated = (text: string) => {
+        const compact = text.replace(/\s/g, "").toLowerCase();
+        return compact.length > 2 && new Set(compact).size === 1;
+    };
+
+    type Values = Record<(typeof FIELDS)[number], string>;
+
+    function validate(values: Values) {
+        const errors: string[] = [];
+        const invalid: string[] = [];
+
+        if (!values.name && !values.email && !values.message) {
+            return { errors: ["form.errEmpty"], invalid: [...FIELDS] as string[] };
+        }
+        const { name, email, message } = values;
+        if (name.length < 2 || !NAME_RE.test(name) || countLetters(name) < 2 || isRepeated(name)) {
+            errors.push("form.errName");
+            invalid.push("name");
+        }
+        if (email.length > 254 || !EMAIL_RE.test(email)) {
+            errors.push("form.errEmail");
+            invalid.push("email");
+        }
+        if (message.length < 10 || countWords(message) < 2 || isRepeated(message)) {
+            errors.push("form.errMessage");
+            invalid.push("message");
+        }
+        return { errors, invalid };
+    }
+
+    function setText(element: Element, key: string) {
+        element.setAttribute("data-i18n", key);
+        element.textContent = t(key, getLang());
+    }
+
+    const BOX = "mt-1 rounded-md border px-4 py-3 text-sm";
+    const KINDS = {
+        error: `${BOX} border-red-500/40 bg-red-500/10 text-red-200`,
+        success: `${BOX} border-green-500/40 bg-green-500/10 text-green-200`,
+    };
+
+    function showStatus(kind: keyof typeof KINDS, titleKey: string, detailKeys: string[] = []) {
+        const box = document.getElementById("contact-status");
+        if (!box) return;
+
+        box.hidden = false;
+        box.className = KINDS[kind];
+        box.setAttribute("role", kind === "error" ? "alert" : "status");
+        box.replaceChildren();
+
+        const title = document.createElement("p");
+        title.className = "font-semibold";
+        setText(title, titleKey);
+        box.append(title);
+
+        if (kind === "success") {
+            for (const key of detailKeys) {
+                const line = document.createElement("p");
+                setText(line, key);
+                box.append(line);
+            }
+        } else if (detailKeys.length) {
+            const list = document.createElement("ul");
+            list.className = "mt-1 list-disc space-y-0.5 pl-5";
+            for (const key of detailKeys) {
+                const item = document.createElement("li");
+                setText(item, key);
+                list.append(item);
+            }
+            box.append(list);
+        }
+    }
+
+    function markInvalid(form: HTMLFormElement, invalid: string[]) {
+        for (const field of FIELDS) {
+            const element = form.elements.namedItem(field) as HTMLElement | null;
+            if (!element) continue;
+            const bad = invalid.includes(field);
+            element.setAttribute("aria-invalid", String(bad));
+            element.classList.toggle("border-red-500/70", bad);
+            element.classList.toggle("border-gray-700", !bad);
+        }
+    }
+
+    function setSending(form: HTMLFormElement, sending: boolean) {
+        form.dataset.sending = String(sending);
+        form.setAttribute("aria-busy", String(sending));
+        const button = form.querySelector<HTMLButtonElement>("#contact-submit");
+        const label = button?.querySelector("span");
+        if (button) button.disabled = sending;
+        if (label) setText(label, sending ? "form.sending" : "contact.send");
+    }
+
+    async function send(values: Values) {
+        if (!ACCESS_KEY) throw new Error("Falta la variable PUBLIC_WEB3FORMS_KEY");
+
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
+        try {
+            const response = await fetch(ENDPOINT, {
+                method: "POST",
+                headers: { "Content-Type": "application/json", Accept: "application/json" },
+                body: JSON.stringify({
+                    access_key: ACCESS_KEY,
+                    subject: `Nuevo mensaje desde tu portafolio: ${values.name}`,
+                    from_name: "Portafolio - Nicolas Facendini",
+                    ...values,
+                }),
+                signal: controller.signal,
+            });
+            const result = await response.json().catch(() => null);
+            if (!response.ok || !result?.success) {
+                throw new Error(result?.message ?? `Respuesta ${response.status}`);
+            }
+        } finally {
+            clearTimeout(timer);
+        }
+    }
+
+    // Delegado en document: sigue funcionando aunque el ClientRouter reemplace el formulario al navegar.
+    document.addEventListener("submit", async (event) => {
+        const form = event.target;
+        if (!(form instanceof HTMLFormElement) || form.id !== "contact-form") return;
+
+        event.preventDefault();
+        if (form.dataset.sending === "true") return;
+
+        const data = new FormData(form);
+        if (data.get("botcheck")) return;
+
+        const values: Values = {
+            name: String(data.get("name") ?? "").trim(),
+            email: String(data.get("email") ?? "").trim(),
+            message: String(data.get("message") ?? "").trim(),
+        };
+
+        const { errors, invalid } = validate(values);
+        markInvalid(form, invalid);
+        if (errors.length) {
+            showStatus("error", "form.errTitle", errors);
+            return;
+        }
+
+        setSending(form, true);
+        try {
+            await send(values);
+            form.reset();
+            markInvalid(form, []);
+            showStatus("success", "form.okTitle", ["form.okText"]);
+        } catch (error) {
+            console.warn("No se pudo enviar el formulario de contacto:", error);
+            showStatus("error", "form.errTitle", ["form.errService"]);
+        } finally {
+            setSending(form, false);
+        }
+    });
+
+    // Al volver a escribir en un campo marcado como inválido, se le quita el rojo.
+    document.addEventListener("input", (event) => {
+        const field = event.target;
+        if (!(field instanceof HTMLElement) || !field.closest("#contact-form")) return;
+        if (field.getAttribute("aria-invalid") !== "true") return;
+        field.setAttribute("aria-invalid", "false");
+        field.classList.remove("border-red-500/70");
+        field.classList.add("border-gray-700");
+    });
+</script>
