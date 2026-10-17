@@ -24,7 +24,7 @@ export default function SearchPanel() {
           project.title,
           project.description,
           project.descriptionEn ?? "",
-          ...(project.icons ?? []),
+          ...(project.technologies ?? []),
         ].join(" ")
       );
       return haystack.includes(term);

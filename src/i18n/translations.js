@@ -25,10 +25,9 @@ export const translations = {
 
     "projects.title": "Proyectos",
     "projects.description": "Mis proyectos mas destacados",
-    "projects.view": "Ver proyecto ↗",
+    "projects.view": "Ver proyecto",
     "projects.done": "Completado",
     "projects.inProgress": "En progreso",
-    "projects.more": "Ver más →",
 
     "contact.title": "Contactame",
     "contact.description":
@@ -130,10 +129,9 @@ export const translations = {
 
     "projects.title": "Projects",
     "projects.description": "My featured projects",
-    "projects.view": "View project ↗",
+    "projects.view": "View project",
     "projects.done": "Completed",
     "projects.inProgress": "In progress",
-    "projects.more": "Learn more →",
 
     "contact.title": "Contact me",
     "contact.description":

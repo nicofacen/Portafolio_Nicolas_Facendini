@@ -35,9 +35,9 @@ export function buildPortfolioContext() {
   const projectsText = projects
     .map((p) => {
       const status = p.finish ? "finalizado" : "en desarrollo";
-      const stack = p.icons.join(", ");
-      const link = p.linkExternal || p.link;
-      return `- ${p.title} (${status}): ${p.description}. Stack: ${stack}. Enlace: ${link}`;
+      const stack = (p.technologies ?? []).join(", ");
+      const link = p.linkExternal;
+      return `- ${p.title} (${status}): ${p.description.replace(/\.$/, "")}. Stack: ${stack}. Enlace: ${link}`;
     })
     .join("\n");
 

@@ -1,3 +1,5 @@
+import { projects, projectId } from "@data/projects.js";
+
 export const explorerItems = [
   {
     type: "folder",
@@ -31,17 +33,14 @@ export const explorerItems = [
           {
             type: "folder",
             name: "my_projects",
-            open: true,
-            // Agregá acá una carpeta por proyecto nuevo, con la misma forma:
-            // {
-            //   type: "folder",
-            //   name: "slug-del-proyecto",
-            //   open: false,
-            //   children: [
-            //     { type: "file", name: "acerca", url: "/my-projects/slug-del-proyecto/#acerca", id: "slug-del-proyecto/acerca" },
-            //   ],
-            // },
-            children: [],
+            open: false,
+            // Un archivo por proyecto de projects.js: al tocarlo lleva a su tarjeta.
+            children: projects.map((project) => ({
+              type: "file",
+              name: project.title,
+              url: `/#${projectId(project)}`,
+              id: projectId(project),
+            })),
           },
         ],
       }

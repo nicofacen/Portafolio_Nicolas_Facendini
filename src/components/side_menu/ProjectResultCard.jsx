@@ -2,13 +2,15 @@ import { useLang } from "@i18n/useLang.js";
 
 export default function ProjectResultCard({ project }) {
   const { lang, t } = useLang();
-  const { title, description, descriptionEn, image, link, finish } = project;
-  const href = link || "#";
+  const { title, description, descriptionEn, image, linkExternal, finish } = project;
+  const href = linkExternal || "#";
+  const externalProps = linkExternal ? { target: "_blank", rel: "noopener noreferrer" } : {};
   const localizedDescription = lang === "en" && descriptionEn ? descriptionEn : description;
 
   return (
     <a
       href={href}
+      {...externalProps}
       className="group flex items-center gap-3 bg-secondary border border-skillColor rounded-xl p-2.5 cursor-pointer transition-all duration-200 hover:border-accent hover:shadow-[0_0_0_1px_rgba(127,219,255,0.3)] hover:-translate-y-0.5"
     >
       <div className="relative flex-shrink-0 w-12 h-12 rounded-lg overflow-hidden bg-main border border-skillColor">

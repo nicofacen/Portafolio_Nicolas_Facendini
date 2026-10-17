@@ -2,56 +2,75 @@
 // CardProyect.astro
 import { t } from "@i18n/lang.js";
 
-export interface CardProyectProps {
+export interface Props {
+	id?: string;
 	title: string;
 	description: string;
 	descriptionEn?: string;
 	image: string;
-	link: string;
 	linkExternal?: string;
-	icons: any[];
+	technologies?: string[];
 	finish: boolean;
 }
-const { title, description, descriptionEn, image, link, linkExternal, icons, finish } = Astro.props;
+const { id, title, description, descriptionEn, image, linkExternal, technologies = [], finish } = Astro.props;
 const statusKey = finish ? "projects.done" : "projects.inProgress";
+const externalAttrs = { target: "_blank", rel: "noopener noreferrer" };
 ---
-<div class="rounded-2xl bg-main overflow-hidden flex flex-col border border-secondary transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl hover:border-accent/40 group">
+<article id={id} class="scroll-mt-24 rounded-2xl bg-main overflow-hidden flex flex-col border border-secondary transition-all duration-300 hover:shadow-2xl hover:border-accent/40 group">
 	<div class="relative overflow-hidden bg-secondary aspect-video">
-		<a href={linkExternal} {...(finish ? { target: "_blank" } : {})} class="block w-full h-full">
-			<img
-				class="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
-				src={image}
-				alt={title}
-			/>
-			{
-				linkExternal && (
-					<div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-						<span class="text-white font-semibold bg-accent/20 backdrop-blur-sm border border-accent/50 px-5 py-2 rounded-full text-sm tracking-wide" data-i18n="projects.view">
-							{t("projects.view", "es")}
-						</span>
-					</div>
-				)
-			}
-		</a>
-		<div class={`absolute top-3 right-3 px-2.5 py-1 rounded-full text-xs font-semibold backdrop-blur-sm ${finish ? 'bg-green-500/80 text-white' : 'bg-yellow-400/80 text-black'}`} data-i18n={statusKey}>
-			{t(statusKey, "es")}
-		</div>
+		{
+			linkExternal ? (
+				<a href={linkExternal} {...externalAttrs} tabindex="-1" aria-hidden="true" class="block w-full h-full">
+					<img
+						class="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
+						src={image}
+						alt=""
+						loading="lazy"
+					/>
+				</a>
+			) : (
+				<img class="w-full h-full object-cover object-top" src={image} alt="" loading="lazy" />
+			)
+		}
 	</div>
 
-	<div class="p-5 flex flex-col gap-2 flex-1">
-		<h2 class="text-xl font-bold text-accent">{title}</h2>
-		<p class="text-primaryText text-sm leading-relaxed flex-1" data-lang-es={description} data-lang-en={descriptionEn ?? description}>{description}</p>
-		<div class="flex items-center justify-between pt-4 mt-2 border-t border-secondary">
-			<a href={link} class="inline-flex items-center gap-1 text-accent text-sm font-semibold hover:text-sky-400 hover:underline transition-colors" data-i18n="projects.more">
-				{t("projects.more", "es")}
-			</a>
-			<div class="flex gap-2">
-				{icons.map((Icon: any) => (
-					<div class="p-1.5 rounded-lg bg-secondary border border-accent/20 hover:border-accent/60 transition-colors">
-						<Icon class="w-5 h-5 text-accent" />
-					</div>
-				))}
-			</div>
+	<div class="p-5 flex flex-col gap-3 flex-1">
+		<div class="flex items-center justify-between gap-3">
+			<h3 class="text-xl font-bold text-accent">{title}</h3>
+			<span
+				class={`shrink-0 rounded-full border px-2.5 py-0.5 text-xs font-semibold ${finish ? 'border-green-500/30 bg-green-500/15 text-green-400' : 'border-yellow-400/30 bg-yellow-400/15 text-yellow-300'}`}
+				data-i18n={statusKey}
+			>
+				{t(statusKey, "es")}
+			</span>
 		</div>
+		<p class="text-primaryText text-sm leading-relaxed" data-lang-es={description} data-lang-en={descriptionEn ?? description}>{description}</p>
+
+		{
+			technologies.length > 0 && (
+				<ul class="flex flex-wrap gap-2" aria-label="Tecnologías">
+					{technologies.map((tech) => (
+						<li class="rounded-md border border-accent/30 bg-skillColor/60 px-2.5 py-1 font-mono text-xs text-accent">
+							{tech}
+						</li>
+					))}
+				</ul>
+			)
+		}
+
+		{
+			linkExternal && (
+				<a
+					href={linkExternal}
+					{...externalAttrs}
+					class="mt-auto inline-flex w-fit items-center gap-2 rounded-lg bg-accent px-5 py-2.5 text-sm font-semibold text-main transition-colors hover:bg-sky-300"
+				>
+					<span data-i18n="projects.view">{t("projects.view", "es")}</span>
+					<svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+						<path d="M7 17 17 7M8 7h9v9"></path>
+					</svg>
+				</a>
+			)
+		}
 	</div>
-</div>
+</article>

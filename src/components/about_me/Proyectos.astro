@@ -1,15 +1,7 @@
 ---
-import Codeigniter from "@components/icons/Codeigniter.astro";
-import Laravel from "@components/icons/Laravel.astro";
-import Next from "@components/icons/Next.astro";
-import Vue from "@components/icons/Vue.astro";
 import LayoutContent from "@components/LayoutContent.astro";
 import CardProyect from "@components/about_me/CardProyect.astro";
-import Nuxt from "@components/icons/Nuxt.astro";
-import Nest from "@components/icons/Nest.astro";
-import { projects } from "@data/projects.js";
-
-const iconMap = { Codeigniter, Laravel, Next, Vue, Nuxt, Nest };
+import { projects, projectId } from "@data/projects.js";
 ---
 
 <LayoutContent
@@ -17,20 +9,42 @@ const iconMap = { Codeigniter, Laravel, Next, Vue, Nuxt, Nest };
   titleKey="projects.title"
   descriptionKey="projects.description"
 >
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-    {
-      projects.map((project) => (
-        <CardProyect
-          title={project.title}
-          description={project.description}
-          descriptionEn={project.descriptionEn}
-          image={project.image}
-          linkExternal={project.linkExternal}
-          link={project.link}
-          icons={project.icons.map((name) => iconMap[name as keyof typeof iconMap])}
-          finish={project.finish}
-        />
-      ))
-    }
+  <div class="projects-wrap">
+    <div class="projects-grid">
+      {
+        projects.map((project) => (
+          <CardProyect
+            id={projectId(project)}
+            title={project.title}
+            description={project.description}
+            descriptionEn={project.descriptionEn}
+            image={project.image}
+            linkExternal={project.linkExternal}
+            technologies={project.technologies}
+            finish={project.finish}
+          />
+        ))
+      }
+    </div>
   </div>
 </LayoutContent>
+
+<style>
+  /* Dos columnas solo si el contenido tiene lugar: con el panel lateral abierto
+     una ventana ancha puede dejar poco espacio. */
+  .projects-wrap {
+    container-type: inline-size;
+  }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.5rem;
+  }
+
+  @container (min-width: 44rem) {
+    .projects-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+</style>
