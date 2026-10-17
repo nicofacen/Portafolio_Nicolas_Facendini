@@ -5,7 +5,7 @@ import TypewriterText from './TypewriterText.astro';
 import HeroActions from './HeroActions.astro';
 import { t } from '@i18n/lang.js';
 ---
-<div class="max-w-7xl relative h-full flex flex-row gap-10 items-center mx-auto">
+<div class="max-w-7xl relative flex flex-row gap-10 items-center mx-auto pt-6 pb-4 md:pb-8">
     <div class="flex-1 flex flex-col gap-6">
         <ProfileBadge />
         <div class="flex flex-col gap-6">
@@ -18,10 +18,17 @@ import { t } from '@i18n/lang.js';
             <p class="leading-relaxed max-w-4xl" data-i18n="hero.bio">
                 {t("hero.bio", "es")}
             </p>
-            <HeroActions />
+            <!-- En pantallas chicas y medianas las redes van junto al botón de CV; si no entran, pasan a la línea de abajo -->
+            <div class="flex flex-wrap items-center gap-4">
+                <div class="xl:hidden">
+                    <SocialNetworks />
+                </div>
+                <HeroActions />
+            </div>
         </div>
     </div>
-    <div class="hidden md:block">
+    <!-- Pantallas grandes: columna vertical a la derecha -->
+    <div class="hidden xl:block">
         <SocialNetworks />
     </div>
 </div>
