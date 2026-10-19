@@ -1,5 +1,5 @@
 // Fuente única de datos de los proyectos del portfolio.
-// Se usa en Proyectos.astro (listado principal), SearchPanel.jsx (buscador) y chatbotContext.js (chatbot).
+// Se usa en Proyectos.astro (listado principal), SearchPanel.jsx (buscador), el Explorador y chatFaq.js (chatbot).
 //
 // Para agregar un proyecto, sumá un objeto con esta forma:
 // {

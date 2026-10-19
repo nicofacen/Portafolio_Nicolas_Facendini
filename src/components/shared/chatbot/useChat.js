@@ -1,57 +1,34 @@
 import { useEffect, useRef, useState } from "react";
 
-const API_URL = import.meta.env.PUBLIC_CHATBOT_API_URL;
+const TYPING_MS = 700;
 
-// Los mensajes fijos del bot guardan la clave de traducción en vez del texto,
-// así cambian de idioma junto con la página. No se envían como historial a la IA.
+// El mensaje de bienvenida guarda la clave de traducción y las preguntas/respuestas guardan
+// el id de la pregunta, así cambian de idioma junto con la página.
 const INITIAL_MESSAGE = { from: "bot", key: "chat.welcome" };
 
 export function useChat(isOpen) {
   const [messages, setMessages] = useState([INITIAL_MESSAGE]);
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef(null);
+  const timer = useRef(null);
 
   useEffect(() => {
     if (!isOpen) return;
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
   }, [messages, isTyping, isOpen]);
 
-  const sendMessage = async (text) => {
-    const trimmed = text.trim();
-    if (!trimmed || isTyping) return;
+  useEffect(() => () => clearTimeout(timer.current), []);
 
-    const history = messages;
-    setMessages((prev) => [...prev, { from: "user", text: trimmed }]);
+  const ask = (faqId) => {
+    if (isTyping) return;
 
-    if (!API_URL) {
-      setMessages((prev) => [
-        ...prev,
-        { from: "bot", key: "chat.notConnected" },
-      ]);
-      return;
-    }
-
+    setMessages((prev) => [...prev, { from: "user", faqId, part: "q" }]);
     setIsTyping(true);
-    try {
-      const res = await fetch(API_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: trimmed, history }),
-      });
-      const data = await res.json();
-      setMessages((prev) => [
-        ...prev,
-        data.reply ? { from: "bot", text: data.reply } : { from: "bot", key: "chat.noReply" },
-      ]);
-    } catch (err) {
-      setMessages((prev) => [
-        ...prev,
-        { from: "bot", key: "chat.error" },
-      ]);
-    } finally {
+    timer.current = setTimeout(() => {
+      setMessages((prev) => [...prev, { from: "bot", faqId, part: "a" }]);
       setIsTyping(false);
-    }
+    }, TYPING_MS);
   };
 
-  return { messages, isTyping, sendMessage, messagesEndRef };
+  return { messages, isTyping, ask, messagesEndRef };
 }

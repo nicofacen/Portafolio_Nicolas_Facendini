@@ -1,7 +1,8 @@
 import ChatBotIcon from "../../icons/ChatBotIcon.jsx";
+import { faqText } from "@data/chatFaq.js";
 import { useLang } from "@i18n/useLang.js";
 
-// Parser mínimo para el markdown que devuelve Gemini: **negrita** y [texto](url).
+// Parser mínimo para el formato de las respuestas (chatFaq.js): **negrita** y [texto](url).
 function renderInlineMarkdown(text) {
   const pattern = /\*\*(.+?)\*\*|\[(.+?)\]\((.+?)\)/g;
   const nodes = [];
@@ -77,12 +78,13 @@ function TypingBubble() {
 }
 
 export default function ChatMessages({ messages, isTyping, messagesEndRef }) {
-  const { t } = useLang();
+  const { lang, t } = useLang();
+  const textOf = (msg) => (msg.key ? t(msg.key) : faqText(msg.faqId, msg.part, lang));
 
   return (
     <div className="flex flex-1 flex-col gap-2 overflow-y-auto px-4 py-4 scrollbar-hidden">
       {messages.map((msg, i) => (
-        <MessageBubble key={i} from={msg.from} text={msg.key ? t(msg.key) : msg.text} />
+        <MessageBubble key={i} from={msg.from} text={textOf(msg)} />
       ))}
       {isTyping && <TypingBubble />}
       <div ref={messagesEndRef} />

@@ -5,7 +5,7 @@ import ChatToggleButton from "./chatbot/ChatToggleButton.jsx";
 
 export default function ChatBot() {
   const [isOpen, setIsOpen] = useState(false);
-  const { messages, isTyping, sendMessage, messagesEndRef } = useChat(isOpen);
+  const { messages, isTyping, ask, messagesEndRef } = useChat(isOpen);
 
   return (
     <div className="fixed bottom-12 right-4 z-50 flex flex-col items-end gap-3">
@@ -13,7 +13,7 @@ export default function ChatBot() {
         <ChatWindow
           messages={messages}
           isTyping={isTyping}
-          sendMessage={sendMessage}
+          ask={ask}
           messagesEndRef={messagesEndRef}
           onClose={() => setIsOpen(false)}
         />

@@ -4,14 +4,14 @@ Guidance for Claude Code (claude.ai/code) when working in this repository.
 
 ## Project
 
-Personal portfolio of Nicolas Facendini, built with Astro 5 and styled like the VS Code interface. React is used for the interactive pieces, Tailwind CSS 3 for styling. It is deployed on Vercel (static site plus one serverless function). UI copy is Spanish (voseo) with an English version.
+Personal portfolio of Nicolas Facendini, built with Astro 5 and styled like the VS Code interface. React is used for the interactive pieces, Tailwind CSS 3 for styling. It is a fully static site deployed on Vercel (no server code, no AI). UI copy is Spanish (voseo) with an English version.
 
 ## Commands
 
 Run from the project root:
 
 - `npm install` - install dependencies
-- `npm run dev` - dev server at `localhost:4321` (the chatbot API does not run here)
+- `npm run dev` - dev server at `localhost:4321`
 - `npm run build` - build to `./dist/`
 - `npm run preview` - serve the production build
 
@@ -20,8 +20,6 @@ Run from the project root:
 See `.env.example`. `PUBLIC_*` variables are inlined into client code at build time.
 
 - `PUBLIC_WEB3FORMS_KEY` - contact form (Web3Forms). Without it the form shows the "could not be sent" notice.
-- `PUBLIC_CHATBOT_API_URL` - URL of `api/chat.js` (`/api/chat` on Vercel).
-- `GEMINI_API_KEY`, `ALLOWED_ORIGIN` - server-only, used by `api/chat.js`.
 - `SITE_URL` - optional; otherwise `VERCEL_PROJECT_PRODUCTION_URL` is used for absolute URLs (Open Graph).
 
 ## Architecture
@@ -33,9 +31,9 @@ See `.env.example`. `PUBLIC_*` variables are inlined into client code at build t
 
 ## Content data (single sources of truth)
 
-- `src/data/projects.js` - projects (cards, search panel, Explorer, chatbot). Use `technologies` and optional `descriptionEn`; screenshots go in `public/projects/`.
+- `src/data/projects.js` - projects (cards, search panel, Explorer, chatbot answers). Use `technologies` and optional `descriptionEn`; screenshots go in `public/projects/`.
 - `src/data/experience.js` - experience and education, bilingual `{ es, en }` (page and chatbot).
-- `src/data/chatbotContext.js` - system prompt for the chatbot (profile, skills, contact). Keep it in sync with the CV.
+- `src/data/chatFaq.js` - the chatbot's predefined questions and answers (bilingual, simple markdown). The bot only answers these; there is no free text input and no AI. Experience and projects answers read the two files above; the rest is written by hand from the CV, so keep it in sync.
 
 ## Internationalization
 

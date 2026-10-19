@@ -1,5 +1,5 @@
 // Fuente única de la sección "Experiencia". La usan Experience.astro (la página) y
-// chatbotContext.js (el chatbot), así los dos cuentan lo mismo.
+// chatFaq.js (las respuestas del chatbot), así los dos cuentan lo mismo.
 //
 // Cada texto va en español (es) e inglés (en). Para agregar un ítem, sumá un objeto al array:
 //   kind:        etiqueta corta si no hay fechas (opcional si hay `period`)
