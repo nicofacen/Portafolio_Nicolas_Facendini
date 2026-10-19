@@ -10,7 +10,7 @@
 //   tags:        etiquetas; un string vale para ambos idiomas, o { es, en }
 export const experience = [
   {
-    period: { es: "2021 – Actualidad", en: "2021 – Present" },
+    period: { es: "Marzo 2021 – Diciembre 2021", en: "March 2021 – December 2021" },
     title: {
       es: "Presencia digital y desarrollo web",
       en: "Digital presence and web development",
@@ -20,8 +20,8 @@ export const experience = [
       en: "Lingerie shop · Lomas de Zamora",
     },
     description: {
-      es: "Gestioné las redes sociales del comercio: creé contenido, respondí las consultas de sus clientes y fui mejorando su presencia digital. Hoy estoy desarrollando su página web con HTML, CSS y JavaScript para que quienes la visiten tengan una experiencia online clara y cómoda.",
-      en: "I managed the shop's social media: I created content, answered customer questions and steadily improved its digital presence. Today I'm building its website with HTML, CSS and JavaScript so visitors get a clear, comfortable online experience.",
+      es: "Entre marzo y diciembre de 2021 gestioné las redes sociales del comercio: creé contenido, respondí las consultas de sus clientes y fui mejorando su presencia digital. Hoy estoy desarrollando su página web con HTML, CSS y JavaScript para que quienes la visiten tengan una experiencia online clara y cómoda.",
+      en: "Between March and December 2021 I managed the shop's social media: I created content, answered customer questions and steadily improved its digital presence. Today I'm building its website with HTML, CSS and JavaScript so visitors get a clear, comfortable online experience.",
     },
     tags: [
       "HTML",

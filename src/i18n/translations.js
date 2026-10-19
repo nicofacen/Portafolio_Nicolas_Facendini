@@ -1,19 +1,19 @@
 export const translations = {
   es: {
-    "header.subtitle": "Portfolio Personal",
+    "header.subtitle": "Portafolio Personal",
 
     "hero.greeting": "Hola, soy",
     "hero.bio":
-      "¡Hola! Soy Nicolas Facendini, estudiante de la Licenciatura en Gestion de la Tecnologia de la Información. Me apasiona crear soluciones digitales útiles, rápidas y bien diseñadas.",
+      "¡Hola! Soy Nicolas Facendini, estudiante de la Licenciatura en Gestión de la Tecnología de la Información. Me apasiona crear soluciones digitales útiles, rápidas y bien diseñadas.",
     "hero.openToWork": "Disponible para trabajar",
     "hero.download": "Descargar",
 
     "about.title": "Sobre mí",
     "about.description":
-      "Un chico interesado en la innovacion y la tecnologia, con ganas de aprender y crecer profesionalmente en el mundo de IT.",
-    "about.role": "Estudiante de la Licenciatura en Gestion de la Tecnologia de la Informacion",
+      "Un chico interesado en la innovación y la tecnología, con ganas de aprender y crecer profesionalmente en el mundo de IT.",
+    "about.role": "Estudiante de la Licenciatura en Gestión de la Tecnología de la Información",
     "about.p1":
-      "Soy una persona apasionada por el desarrollo de software y la tecnología que busca su primera experiencia profesional en algun rol de IT.",
+      "Soy una persona apasionada por el desarrollo de software y la tecnología que busca su primera experiencia profesional en algún rol de IT.",
     "about.p2":
       "A lo largo de mi formación, he adquirido conocimientos en diversas áreas de la tecnología, incluyendo desarrollo web, bases de datos y gestión de proyectos. Me interesa especialmente el desarrollo de aplicaciones web modernas y escalables.",
 
@@ -24,12 +24,12 @@ export const translations = {
     "skills.description": "Mis habilidades como desarrollador",
 
     "projects.title": "Proyectos",
-    "projects.description": "Mis proyectos mas destacados",
+    "projects.description": "Mis proyectos más destacados",
     "projects.view": "Ver proyecto",
     "projects.done": "Completado",
     "projects.inProgress": "En progreso",
 
-    "contact.title": "Contactame",
+    "contact.title": "Contáctame",
     "contact.description":
       "¿Tienes una idea en mente? Transformémosla en una experiencia visual única y funcional.",
     "contact.name": "Nombre",
