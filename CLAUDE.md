@@ -1,105 +1,58 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Guidance for Claude Code (claude.ai/code) when working in this repository.
 
-## Project Overview
+## Project
 
-This is a portfolio website built with Astro 5, styled to resemble a VS Code interface. The site uses React components for interactive elements and Tailwind CSS for styling. It's deployed to GitHub Pages at `https://rubo17.github.io/portfolio/`.
+Personal portfolio of Nicolas Facendini, built with Astro 5 and styled like the VS Code interface. React is used for the interactive pieces, Tailwind CSS 3 for styling. It is deployed on Vercel (static site plus one serverless function). UI copy is Spanish (voseo) with an English version.
 
-## Development Commands
+## Commands
 
-All commands run from the project root:
+Run from the project root:
 
-- `npm install` - Install dependencies
-- `npm run dev` - Start dev server at `localhost:4321`
-- `npm run build` - Build production site to `./dist/`
-- `npm run preview` - Preview production build locally
-- `npm run deploy` - Deploy to GitHub Pages (builds and pushes to gh-pages branch)
-- `npm run astro ...` - Run Astro CLI commands (e.g., `npm run astro check`)
+- `npm install` - install dependencies
+- `npm run dev` - dev server at `localhost:4321` (the chatbot API does not run here)
+- `npm run build` - build to `./dist/`
+- `npm run preview` - serve the production build
+
+## Environment variables
+
+See `.env.example`. `PUBLIC_*` variables are inlined into client code at build time.
+
+- `PUBLIC_WEB3FORMS_KEY` - contact form (Web3Forms). Without it the form shows the "could not be sent" notice.
+- `PUBLIC_CHATBOT_API_URL` - URL of `api/chat.js` (`/api/chat` on Vercel).
+- `GEMINI_API_KEY`, `ALLOWED_ORIGIN` - server-only, used by `api/chat.js`.
+- `SITE_URL` - optional; otherwise `VERCEL_PROJECT_PRODUCTION_URL` is used for absolute URLs (Open Graph).
 
 ## Architecture
 
-### VS Code UI Theme
+- `src/layouts/Layout.astro` - page shell: Header, side panels (`PanelSwicher.jsx` + `SideBar.jsx`), tabs (`MenuTabs.jsx`), Footer, ChatBot. Uses Astro's `ClientRouter`.
+- `src/pages/index.astro` - the single page; it stacks the sections in `src/components/about_me/` (Hero, AboutMe, Experience, Habilidades, Proyectos, Contacto). Sections wrap `LayoutContent.astro`, which takes `titleKey` / `descriptionKey` translation keys.
+- Side panels live in `src/components/side_menu/`. The Explorer tree (`explorerData.js`) builds the `my_projects` folder from `projects.js`; each project links to its card (`#proyecto-<slug>`).
+- Header: the File/Edit menu collapses into a hamburger below `md`; the page title is centered with absolute positioning.
 
-The site mimics VS Code's interface with these key architectural elements:
+## Content data (single sources of truth)
 
-1. **Layout System** (`src/layouts/Layout.astro`)
-   - Main layout wrapper with Header, Footer, and content area
-   - Uses `client:load` directive for React components requiring interactivity
-   - Fixed header/footer with scrollable content area
+- `src/data/projects.js` - projects (cards, search panel, Explorer, chatbot). Use `technologies` and optional `descriptionEn`; screenshots go in `public/projects/`.
+- `src/data/experience.js` - experience and education, bilingual `{ es, en }` (page and chatbot).
+- `src/data/chatbotContext.js` - system prompt for the chatbot (profile, skills, contact). Keep it in sync with the CV.
 
-2. **Panel System** (side navigation)
-   - `PanelSwitcher.jsx` - Main React component managing panel state
-   - `SideBar.jsx` - Icon-based navigation (Explorer, Search, Source Control, Debug, Extensions)
-   - Individual panel components in `src/components/side_menu/`
-   - Active panel tracked via React state (0-4 index)
+## Internationalization
 
-3. **Tab Navigation** (`MenuTabs.jsx`)
-   - VS Code-style tabs at top of content area
-   - Manages multiple open "files" (though currently shows single "About me" tab)
-   - Supports tab closing with minimum one tab enforcement
+- Strings live in `src/i18n/translations.js` (`es` and `en` must have the same keys).
+- Static markup: add `data-i18n="key"` (also `data-i18n-placeholder`, `-title`, `-aria-label`). Content that comes from data files uses `data-lang-es` / `data-lang-en` attributes.
+- `src/i18n/lang.js` applies the language to the DOM, stores it in `localStorage` and emits `langchange`. React components use the `useLang()` hook.
+- Never put `↗`-style symbols in translated text; Windows renders them as emoji.
 
-### Content Structure
+## Contact form
 
-Portfolio sections in `src/components/about_me/`:
-- `Hero.astro` - Landing section
-- `AboutMe.astro` - Personal info
-- `Exprerience.astro` - Work experience
-- `Habilidades.astro` - Skills showcase
-- `Proyectos.astro` - Projects display with `CardProyect.astro` components
-- `Contacto.astro` - Contact information
+`Contacto.astro` validates in the browser and posts to Web3Forms. The form needs `data-astro-reload`: otherwise `ClientRouter` intercepts the submit and navigates to `/?name=...`.
 
-All sections use the `LayoutContent.astro` wrapper for consistent section styling with accent-colored headers.
+## Responsive notes
 
-### Technology Icons
-
-Icon components in `src/components/icons/` represent various technologies (React, Vue, Astro, etc.). Mix of `.astro` and `.jsx` files depending on interactivity needs.
+- The Explorer panel can take ~350px, so the viewport width does not tell how much room the content has. Layouts that depend on content width (About, Projects) use CSS container queries in a `<style>` block, not Tailwind breakpoints.
+- Spacing between sections is set in `LayoutContent.astro` (`py-4 md:py-8`).
 
 ## Styling
 
-### Tailwind Configuration
-
-Custom color palette defined in `tailwind.config.js`:
-- `main: #181818` - Primary background (VS Code dark theme)
-- `secondary: #1F1F1F` - Secondary background
-- `primaryText: #C4C8D1` - Main text color
-- `accent: #7FDBFF` - Accent color for highlights/active states
-- `skillColor: #292939` - Skill badge background
-
-Use these semantic color names instead of arbitrary hex values.
-
-### Global Styles
-
-`src/styles/global.css` contains global CSS. Layout includes custom scrollbar hiding for clean VS Code aesthetic.
-
-## Configuration
-
-### Astro Config (`astro.config.mjs`)
-
-Site configured for GitHub Pages deployment:
-- `site: "https://rubo17.github.io"`
-- `base: "/portfolio/"` - Important: all internal links and assets must respect this base path
-- Integrations: Tailwind CSS and React
-
-Always account for the `/portfolio/` base path when working with:
-- Asset paths (use `/portfolio/` prefix)
-- Internal navigation links
-- API endpoints or data fetching
-
-## React Integration
-
-React components use `.jsx` extension and require `client:load` directive in Astro files for hydration. Key interactive components:
-- `PanelSwitcher` - Panel state management
-- `MenuTabs` - Tab navigation
-- `SideBar` - Icon navigation
-
-Non-interactive presentational components use `.astro` files for better performance.
-
-## Page Structure
-
-Pages in `src/pages/`:
-- `index.astro` - Main landing page (About me)
-- `aiudo-formacion.astro` - Project page
-- `longlife.astro` - Project page
-
-Each page uses the main `Layout.astro` wrapper.
+Palette in `tailwind.config.js`: `main #181818`, `secondary #1F1F1F`, `primaryText #C4C8D1`, `accent #7FDBFF`, `skillColor #292939`. Prefer these names over raw hex values. Icons are components in `src/components/icons/` (`.astro` unless they need React).

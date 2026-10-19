@@ -25,6 +25,3 @@ pnpm-debug.log*
 
 # old project snapshot, not needed in the repo
 portfolio-main.zip
-
-# workflow viejo de deploy a Hostinger (repo antiguo de Ruben), no aplica ahora
-.github/
