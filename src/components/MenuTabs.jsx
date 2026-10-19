@@ -2,30 +2,28 @@ import Cerrar from "@components/icons/CerrarReact";
 import { useState, useEffect } from "react";
 import Star from "./icons/Star.jsx";
 import { navigate } from 'astro:transitions/client';
+import { readJson, writeJson } from "@components/shared/safeStorage.js";
+
+const TABS_KEY = "portfolioTabs";
+const isValidTabs = (value) =>
+  Array.isArray(value) && value.every((tab) => tab && typeof tab.name === "string" && typeof tab.url === "string");
 
 export default function MenuTabs({ currentPage = "About me" }) {
   const [tabs, setTabs] = useState([]);
   const [activeTab, setActiveTab] = useState(currentPage);
 
-  // Cargar tabs desde localStorage al montar
+  // Cargar tabs guardadas al montar (si no hay o están dañadas, se arranca con la página actual)
   useEffect(() => {
-    const savedTabs = localStorage.getItem('portfolioTabs');
-    if (savedTabs) {
-      const parsedTabs = JSON.parse(savedTabs);
-      setTabs(parsedTabs);
+    const saved = readJson(TABS_KEY, null);
+    const savedTabs = isValidTabs(saved) ? saved : [];
 
-      // Si la página actual no está en los tabs, añadirla
-      if (!parsedTabs.some(tab => tab.name === currentPage)) {
-        const newTabs = [...parsedTabs, { name: currentPage, url: window.location.pathname }];
-        setTabs(newTabs);
-        localStorage.setItem('portfolioTabs', JSON.stringify(newTabs));
-      }
-    } else {
-      // Si no hay tabs guardados, crear el primero
-      const initialTab = [{ name: currentPage, url: window.location.pathname }];
-      setTabs(initialTab);
-      localStorage.setItem('portfolioTabs', JSON.stringify(initialTab));
-    }
+    // Si la página actual no está en las tabs, añadirla
+    const nextTabs = savedTabs.some((tab) => tab.name === currentPage)
+      ? savedTabs
+      : [...savedTabs, { name: currentPage, url: window.location.pathname }];
+
+    setTabs(nextTabs);
+    writeJson(TABS_KEY, nextTabs);
     setActiveTab(currentPage);
   }, [currentPage]);
 
@@ -37,7 +35,7 @@ export default function MenuTabs({ currentPage = "About me" }) {
 
     const filtered = tabs.filter((tab) => tab.name !== tabToDelete.name);
     setTabs(filtered);
-    localStorage.setItem('portfolioTabs', JSON.stringify(filtered));
+    writeJson(TABS_KEY, filtered);
 
     // Si cerramos el tab activo, navegar al primero
     if (activeTab === tabToDelete.name && filtered.length > 0) {
