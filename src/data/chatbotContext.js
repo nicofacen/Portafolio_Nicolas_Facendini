@@ -1,21 +1,43 @@
 // Contexto (system prompt) que usa el chatbot para responder sobre Nicolas y su portfolio.
 // Lo importa la función serverless que llama a la API de IA — no se usa en el cliente
 // para no exponer el texto completo innecesariamente en cada carga de página.
+// Los datos salen de acá, de experience.js y de projects.js: mantenelos al día con tu CV.
 import { projects } from "./projects.js";
 import { experience } from "./experience.js";
 
 export const profile = {
   name: "Nicolas Facendini",
-  role: "Estudiante de la Licenciatura en Gestion de la Tecnologia de la Informacion",
-  education: "Licenciatura en Gestion de la Tecnologia de la Informacion en UADE(Universidad Argentina de la Empresa)",
-  bio: "Una persona apasionada por el desarrollo de software y la tecnología que busca su primera experiencia profesional en algun rol de IT.",
+  role: "Estudiante de la Licenciatura en Gestión de la Tecnología de la Información",
+  education: "Licenciatura en Gestión de la Tecnología de la Información en UADE (Universidad Argentina de la Empresa), 2022 – en curso (80%)",
+  bio: "Estudiante orientado al desarrollo web y a la tecnología aplicada al negocio. Es una persona proactiva, analítica y con alta capacidad de aprendizaje que busca su primera experiencia profesional en algún rol de IT para aportar valor y desarrollarse en entornos corporativos.",
+  location: "Buenos Aires, Argentina",
+  languages: ["Español (nativo)", "Inglés (avanzado)"],
 };
 
 export const skills = {
-  frontend: ["HTML", "CSS", "JavaScript", "TypeScript", "Vue", "React", "Astro", "Next.js", "Nuxt.js"],
-  backend: ["PHP", "Laravel", "CodeIgniter", "MySQL"],
-  tools: ["Docker", "VS Code", "Git", "Postman"],
+  lenguajes: ["HTML", "CSS", "JavaScript", "Python", "Java"],
+  frameworks: ["React", "Astro"],
+  basesDeDatos: ["SQL (SQL Server)"],
+  herramientas: ["Git", "GitHub", "Docker", "Postman", "Visual Studio Code"],
 };
+
+// Conocimientos de la carrera y habilidades blandas (según el CV).
+export const knowledge = [
+  "Algoritmos y estructuras de datos",
+  "Sistemas operativos Windows y Linux",
+  "Redes de datos (nivel básico)",
+  "Testing de aplicaciones",
+  "Ingeniería de datos inicial",
+  "Diseño de interfaces y experiencia de usuario (UX/UI)",
+  "Análisis de datos y estadística aplicada",
+  "Evaluación de proyectos de tecnología",
+  "Marketing y negocios web",
+  "Gestión de tecnología e innovación",
+  "Sistemas de información y procesos de negocio",
+  "Comunicación efectiva y pensamiento crítico",
+  "Trabajo en equipo, organización y gestión del tiempo",
+  "Liderazgo y negociación",
+];
 
 export const contact = {
   email: "nicolas.facendini@gmail.com",
@@ -47,14 +69,20 @@ Si te preguntan algo que no está en este contexto, dilo con honestidad y sugier
 ## Sobre Nicolas
 ${profile.bio}
 Formación: ${profile.education}.
+Ubicación: ${profile.location}.
+Idiomas: ${profile.languages.join(", ")}.
 
 ## Experiencia
 ${experienceText}
 
 ## Habilidades
-- Frontend: ${skills.frontend.join(", ")}
-- Backend: ${skills.backend.join(", ")}
-- Herramientas: ${skills.tools.join(", ")}
+- Lenguajes: ${skills.lenguajes.join(", ")}
+- Frameworks y librerías: ${skills.frameworks.join(", ")}
+- Bases de datos: ${skills.basesDeDatos.join(", ")}
+- Herramientas: ${skills.herramientas.join(", ")}
+
+## Conocimientos
+${knowledge.join(", ")}
 
 ## Proyectos
 ${projectsText}

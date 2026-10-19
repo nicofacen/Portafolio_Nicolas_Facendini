@@ -13,12 +13,6 @@ export default function SourceControlPanel() {
     { file: "Habilidades.astro", status: "M", color: "text-yellow-500" },
   ];
 
-  const recentCommits = [
-    { hash: "a7d3675", message: "change server dir", time: "hace 2 días" },
-    { hash: "885ec34", message: "feat: bg-main in the body", time: "hace 3 días" },
-    { hash: "e1059a2", message: "fix: hide social networs on mobile", time: "hace 5 días" },
-  ];
-
   return (
     <PanelSection>
       <div className="px-3">

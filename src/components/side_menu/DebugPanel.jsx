@@ -20,7 +20,7 @@ export default function DebugPanel() {
 
   const watchExpressions = [
     { expression: "window.innerWidth", value: "1920" },
-    { expression: "document.title", value: "Astro Basics" },
+    { expression: "document.title", value: "Portafolio - Nicolas Facendini" },
   ];
 
   return (
